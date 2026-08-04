@@ -1,7 +1,10 @@
-﻿using AuthUserServiceApplication.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using AuthUserServiceApplication.Interfaces;
 using AuthUserServiceApplication.DTOs;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using AuthUserServiceApplication.Exceptions;
+
 namespace AuthUserServiceApplication.Services.clients.Queries.GetClients
 {
 
@@ -9,17 +12,25 @@ namespace AuthUserServiceApplication.Services.clients.Queries.GetClients
         : IRequestHandler<GetClientsQuery, IEnumerable<ClientsDTO>>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IMemoryCache _cache;
+        private readonly ICurrentUserService _currentUser;
 
-        public GetClientsQueryHandler(IApplicationDbContext context)
+        public GetClientsQueryHandler(IApplicationDbContext context, IMemoryCache cache, ICurrentUserService currentUser)
         {
             _context = context;
+            _cache = cache;
+            _currentUser = currentUser;
         }
-
 
         public async Task<IEnumerable<ClientsDTO>> Handle(
             GetClientsQuery request,
             CancellationToken cancellationToken)
         {
+            if (!_currentUser.IsAdmin )
+            {
+                throw new ForbiddenException();
+            }
+
             var clients = await _context.Clients
                 .Where(c => c.IsActive)
                 .Select(c => new ClientsDTO
@@ -33,8 +44,7 @@ namespace AuthUserServiceApplication.Services.clients.Queries.GetClients
                     AccountBalance = c.AccountBalance
                 })
                 .ToListAsync(cancellationToken);
-
-
+            
             return clients;
         }
     }

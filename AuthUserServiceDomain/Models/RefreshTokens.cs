@@ -4,11 +4,11 @@ namespace AuthUserServiceDomain.Models
 {
     public class RefreshTokens
     {
-        [ForeignKey("Users")]
+        [ForeignKey("User")]
         public int Id { get; set; }
         public string? RefreshToken { get; set; }
 
         public DateTime RefreshTokenExpiryTime { get; set; }
-        //public Users? User { get; set; }
+        public Users? User { get; set; }
     }
 }

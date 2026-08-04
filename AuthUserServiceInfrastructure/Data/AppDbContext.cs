@@ -14,7 +14,7 @@ namespace AuthUserServiceInfrastructure.Data
         public DbSet<Admins> Admins { get; set; }
         public DbSet<Brokers> Brokers { get; set; }
         public DbSet<RefreshTokens> RefreshTokens { get; set; }
-        
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         { 
@@ -30,6 +30,11 @@ namespace AuthUserServiceInfrastructure.Data
             modelBuilder.Entity<Admins>()
                 .ToTable("Admins");
 
+            modelBuilder.Entity<RefreshTokens>()
+                .HasOne(rt => rt.User)
+                .WithOne()
+                .HasForeignKey<RefreshTokens>(rt => rt.Id)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

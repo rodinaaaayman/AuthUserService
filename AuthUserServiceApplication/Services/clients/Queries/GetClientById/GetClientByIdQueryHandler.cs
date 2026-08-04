@@ -25,47 +25,6 @@ public class GetClientByIdQueryHandler
         _currentUser = currentUser;
     }
 
-
-    //public async Task<ClientsDTO?> Handle(
-    //    GetClientByIdQuery request,
-    //    CancellationToken cancellationToken)
-    //{
-    //    var cacheKey = $"client_{request.Id}";
-
-    //    if (_cache.TryGetValue(cacheKey, out ClientsDTO? cachedClient))
-    //    {
-    //        return cachedClient;
-    //    }
-
-    //    var client = await _context.Clients
-    //        .Where(c => c.Id == request.Id && c.IsActive)
-    //        .Select(c => new ClientsDTO
-    //        {
-    //            Username = c.Username,
-    //            Id = c.Id,
-    //            Name = c.Name,
-    //            Email = c.Email,
-    //            NationalID = c.NationalID,
-    //            PhoneNumber = c.PhoneNumber,
-    //            AccountBalance = c.AccountBalance
-    //        })
-    //        .FirstOrDefaultAsync(cancellationToken);
-
-    //    if (client == null)
-    //    {
-    //        return null;
-    //    }
-
-    //    _cache.Set(
-    //   cacheKey,
-    //   client,
-    //   new MemoryCacheEntryOptions
-    //   {
-    //       SlidingExpiration = TimeSpan.FromMinutes(5)
-    //   });
-
-    //    return client;
-    //}
     public async Task<ClientsDTO?> Handle(
     GetClientByIdQuery request,
     CancellationToken cancellationToken)
