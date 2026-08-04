@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="AuthUserServiceApi/AuthUserServiceApi.csproj" />
+  <Project Path="AuthUserServiceApplication/AuthUserServiceApplication.csproj" />
+  <Project Path="AuthUserServiceDomain/AuthUserServiceDomain.csproj" />
+  <Project Path="AuthUserServiceInfrastructure/AuthUserServiceInfrastructure.csproj" />
+</Solution>
