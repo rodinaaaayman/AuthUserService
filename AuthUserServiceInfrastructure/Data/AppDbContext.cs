@@ -1,5 +1,4 @@
-﻿
-using AuthUserServiceApplication.Interfaces;
+﻿using AuthUserServiceApplication.Interfaces;
 using AuthUserServiceDomain.Models;
 using Microsoft.EntityFrameworkCore;
 namespace AuthUserServiceInfrastructure.Data

@@ -4,7 +4,6 @@ using AuthUserServiceApplication.Services.clients.Commands.UpdateClient;
 using AuthUserServiceApplication.Services.clients.Queries.GetClientById;
 using AuthUserServiceApplication.Services.clients.Queries.GetClients;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -104,11 +103,11 @@ namespace AuthUserServiceApi.Controllers
             return NoContent();
         }
         ////Get Client's Orders
-        //[HttpGet("{clientId}/orders")]
-        //public async Task<IActionResult> GetClientOrders(int clientId)
+        //[HttpGet("{Id}/orders")]
+        //public async Task<IActionResult> GetClientOrders(int Id)
         //{
         //    var result = await _mediator.Send(
-        //        new GetClientOrdersQuery(clientId)
+        //        new GetClientOrdersQuery(Id)
         //    );
 
         //    return Ok(result);

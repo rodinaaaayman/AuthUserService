@@ -81,6 +81,7 @@ builder.Services
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IEventPublisher, RabbitMqEventPublisher>();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddMediatR(cfg =>
@@ -89,6 +90,7 @@ builder.Services.AddMediatR(cfg =>
     typeof(GetClientByIdQueryHandler).Assembly
     );
 });
+builder.Services.AddHostedService<ClientStatusRequestConsumer>();
 
 var app = builder.Build();
 app.UseExceptionHandler();

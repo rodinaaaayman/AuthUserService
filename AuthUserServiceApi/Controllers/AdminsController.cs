@@ -1,8 +1,6 @@
 ﻿using AuthUserServiceApplication.DTOs;
-using AuthUserServiceDomain.Enums;
 using AuthUserServiceDomain.Models;
 using AuthUserServiceInfrastructure.Data;
-using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,7 +40,6 @@ namespace AuthUserServiceApi.Controllers
         }
 
         // PUT: api/Admins/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAdmins(int id, Admins admins)
         {
@@ -73,7 +70,6 @@ namespace AuthUserServiceApi.Controllers
         }
 
         // POST: api/Admins
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Admins>> PostAdmins(CreateAdminDTO dto)
         {

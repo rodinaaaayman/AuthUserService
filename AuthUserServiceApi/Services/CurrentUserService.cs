@@ -13,22 +13,18 @@ public class CurrentUserService : ICurrentUserService
     {
         _httpContextAccessor = httpContextAccessor;
     }
-
-
     public int Id
     {
         get
         {
-            var userId = _httpContextAccessor
+            var Id = _httpContextAccessor
                 .HttpContext?
                 .User
                 .FindFirstValue(ClaimTypes.NameIdentifier);
 
-            return int.Parse(userId!);
+            return int.Parse(Id!);
         }
     }
-
-
     public bool IsAdmin =>
         _httpContextAccessor
             .HttpContext!

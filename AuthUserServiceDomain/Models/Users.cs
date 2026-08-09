@@ -16,7 +16,5 @@ namespace AuthUserServiceDomain.Models
         public string NationalId { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public Roles Role { get; set; }
-        //public string? RefreshToken { get; set; }
-        //public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }

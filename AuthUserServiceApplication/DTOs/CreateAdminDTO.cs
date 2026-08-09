@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
-
 namespace AuthUserServiceApplication.DTOs
 {
     public class CreateAdminDTO
