@@ -39,6 +39,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<AppDbContext>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddMediatR(cfg =>
@@ -93,6 +95,10 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddHostedService<ClientStatusRequestConsumer>();
 
 var app = builder.Build();
+app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = _ => true
+});
 app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())

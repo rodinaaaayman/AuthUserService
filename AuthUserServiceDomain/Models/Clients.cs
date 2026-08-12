@@ -1,11 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace AuthUserServiceDomain.Models
+﻿namespace AuthUserServiceDomain.Models
 {
     public class Clients : Users
     {
-        [ForeignKey("Users")]
-        public int Id { get; set; }
         public Decimal AccountBalance { get; set; }
         public void Deposit(decimal amount)
         {

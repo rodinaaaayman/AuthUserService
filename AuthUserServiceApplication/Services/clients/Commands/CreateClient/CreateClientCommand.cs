@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AuthUserServiceApplication.Services.clients.Commands.CreateClient;
+using MediatR;
 
 public record CreateClientCommand(
     string Username,
@@ -10,5 +11,4 @@ public record CreateClientCommand(
     string City,
     string NationalId,
     string Password,
-    decimal Deposit)
-    : IRequest<int>;
+    decimal Deposit) : IRequest<ClientResponse>;

@@ -50,17 +50,60 @@ public class ClientStatusRequestConsumer : BackgroundService
 
             ClientStatusResponse response;
 
+            //using (var scope = _scopeFactory.CreateScope())
+            //{
+            //    var context = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
+            //    var client = await context.Clients.FindAsync(request!.Id);
+
+            //    response = new ClientStatusResponse
+            //    {
+            //        Id = request.Id,
+            //        Exists = client is not null,
+            //        IsActive = client?.IsActive ?? false ,
+            //        AccountBalance = client?.AccountBalance ?? 0,   
+            //    };
+            //}
             using (var scope = _scopeFactory.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
+
+                await using var tx = await context.Database.BeginTransactionAsync();
+
                 var client = await context.Clients.FindAsync(request!.Id);
 
-                response = new ClientStatusResponse
+                if (client is null)
                 {
-                    Id = request.Id,
-                    Exists = client is not null,
-                    IsActive = client?.IsActive ?? false
-                };
+                    response = new ClientStatusResponse { Exists = false };
+                }
+                else if (!client.IsActive)
+                {
+                    response = new ClientStatusResponse { Exists = true, IsActive = false };
+                }
+                else if (client.AccountBalance < request.Amount)
+                {
+                    response = new ClientStatusResponse
+                    {
+                        Exists = true,
+                        IsActive = true,
+                        AccountBalance = client.AccountBalance,
+                        FundsReserved = false,
+                        FailureReason = "Insufficient balance"
+                    };
+                }
+                else
+                {
+                    client.AccountBalance -= request.Amount;
+                    await context.SaveChangesAsync(stoppingToken);
+                    await tx.CommitAsync();
+
+                    response = new ClientStatusResponse
+                    {
+                        Exists = true,
+                        IsActive = true,
+                        AccountBalance = client.AccountBalance,
+                        FundsReserved = true
+                    };
+                }
             }
 
             var replyJson = JsonSerializer.Serialize(response);

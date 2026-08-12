@@ -1,4 +1,5 @@
 ﻿using AuthUserServiceApplication.DTOs;
+using AuthUserServiceApplication.Services.clients.Commands.CreateClient;
 using AuthUserServiceApplication.Services.clients.Commands.DeleteClient;
 using AuthUserServiceApplication.Services.clients.Commands.UpdateClient;
 using AuthUserServiceApplication.Services.clients.Queries.GetClientById;
@@ -20,7 +21,6 @@ namespace AuthUserServiceApi.Controllers
         {
             _mediator = mediator;
         }
-
         // GET: api/Clients
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ClientsDTO>>> GetClients()
@@ -32,18 +32,11 @@ namespace AuthUserServiceApi.Controllers
 
         // GET: api/Clients/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClientsDTO>> GetClient(int id)
+        public async Task<ActionResult<ClientResponse>> GetClientById(int id)
         {
-            var client = await _mediator.Send(new GetClientByIdQuery(id));
-
-
-            if (client == null)
-            {
-                return NotFound();
-            }
-
-
-            return Ok(client);
+            var result = await _mediator.Send(new GetClientByIdQuery(id));
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
         // PUT: api/Clients/5
@@ -68,23 +61,12 @@ namespace AuthUserServiceApi.Controllers
 
         // POST: api/Clients
         [HttpPost]
-        public async Task<IActionResult> PostClients(CreateClientsDTO dto)
+        [ProducesResponseType(typeof(ClientResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ClientResponse>> CreateClient(CreateClientCommand command)
         {
-            var command = new CreateClientCommand(
-                dto.Username!,
-                dto.Email,
-                dto.FirstName!,
-                dto.LastName!,
-                dto.Address!,
-                dto.City!, 
-                dto.Password,
-                dto.NationalId,
-                dto.PhoneNumber,
-                dto.Deposit);
-
-            var id = await _mediator.Send(command);
-
-            return CreatedAtAction(nameof(GetClient), new { id }, id);
+            var result = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetClientById), new { id = result.Id }, result);
         }
         // DELETE: api/Clients/5
         [HttpDelete("{id}")]

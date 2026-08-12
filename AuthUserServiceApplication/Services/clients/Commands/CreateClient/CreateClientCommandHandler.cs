@@ -3,11 +3,12 @@ using AuthUserServiceApplication.Interfaces;
 using AuthUserServiceDomain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using AuthUserServiceApplication.Services.clients.Commands.CreateClient;
 
 namespace AuthUserServiceApplication.Services.clients.Commands.CreateClient
 {
     public class CreateClientCommandHandler
-        : IRequestHandler<CreateClientCommand, int>
+        : IRequestHandler<CreateClientCommand, ClientResponse>
     {
         private readonly IApplicationDbContext _context;
         private readonly IEventPublisher _eventPublisher;
@@ -18,7 +19,7 @@ namespace AuthUserServiceApplication.Services.clients.Commands.CreateClient
             _eventPublisher = eventPublisher;
         }
 
-        public async Task<int> Handle(
+        public async Task<ClientResponse> Handle(
             CreateClientCommand request,
             CancellationToken cancellationToken)
         {
@@ -56,8 +57,6 @@ namespace AuthUserServiceApplication.Services.clients.Commands.CreateClient
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            // Publish only after SaveChangesAsync succeeds — client.Id is
-            // populated by EF Core at this point (auto-increment), not before.
             await _eventPublisher.PublishAsync(new UserCreatedEvent
             {
                 Id = client.Id,
@@ -66,7 +65,20 @@ namespace AuthUserServiceApplication.Services.clients.Commands.CreateClient
                 CreatedAtUtc = DateTime.UtcNow
             }, routingKey: "user.created");
 
-            return client.Id;
+            return new ClientResponse
+            {
+                Id = client.Id,
+                Username = client.Username,
+                Email = client.Email,
+                FirstName = client.FirstName,
+                LastName = client.LastName,
+                PhoneNumber = client.PhoneNumber,
+                Address = client.Address,
+                City = client.City,
+                NationalId = client.NationalId,
+                Role = client.Role.ToString(),
+                AccountBalance = client.AccountBalance
+            };
         }
     }
 }
