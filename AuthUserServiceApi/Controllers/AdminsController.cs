@@ -83,7 +83,7 @@ namespace AuthUserServiceApi.Controllers
                 Address = dto.Address,
                 City = dto.City,
                 NationalId = dto.NationalId,
-                Password = dto.Password,
+                HashedPassword = new PasswordHasher().Hash(dto.Password),
                 Role = AuthUserServiceDomain.Enums.Roles.Admin
             };
 

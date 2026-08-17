@@ -77,7 +77,7 @@ namespace AuthUserServiceApi.Controllers
             {
                 Username = dto.Username,
                 Email = dto.Email,
-                Password = dto.Password,
+                HashedPassword = new PasswordHasher().Hash(dto.Password),
                 Role = Roles.Broker
             };
             _context.Brokers.Add(Broker);

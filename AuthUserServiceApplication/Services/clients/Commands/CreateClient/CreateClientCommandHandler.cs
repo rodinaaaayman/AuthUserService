@@ -3,7 +3,7 @@ using AuthUserServiceApplication.Interfaces;
 using AuthUserServiceDomain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using AuthUserServiceApplication.Services.clients.Commands.CreateClient;
+//using AuthUserServiceApplication.Services.clients.Commands.CreateClient;
 
 namespace AuthUserServiceApplication.Services.clients.Commands.CreateClient
 {
@@ -47,7 +47,7 @@ namespace AuthUserServiceApplication.Services.clients.Commands.CreateClient
                 Address = request.Address,
                 City = request.City,
                 NationalId = request.NationalId,
-                Password = request.Password,
+                HashedPassword = new PasswordHasher().Hash(request.Password),
                 Role = AuthUserServiceDomain.Enums.Roles.Client
             };
 

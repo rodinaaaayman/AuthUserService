@@ -31,13 +31,12 @@ namespace AuthUserServiceApplication.Services.auth.Commands
             if (user == null)
                 throw new Exception("Invalid credentials.");
 
-            if (user.Password != request.Password)
+            if (!new PasswordHasher().Verify(request.Password, user.HashedPassword))
                 throw new Exception("Invalid credentials.");
 
             var accessToken = _jwt.GenerateAccessToken(user);
             var refreshToken = _jwt.GenerateRefreshToken();
 
-            // Check if a refresh token row already exists for this user
             var existingToken = await _context.RefreshTokens
                 .FirstOrDefaultAsync(x => x.Id == user.Id, cancellationToken);
 

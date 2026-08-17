@@ -14,7 +14,7 @@ namespace AuthUserServiceDomain.Models
         public string? Address { get; set; } = string.Empty;
         public string? City { get; set; }
         public string NationalId { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public string HashedPassword { get; set; } = string.Empty;
         public Roles Role { get; set; }
     }
 }
